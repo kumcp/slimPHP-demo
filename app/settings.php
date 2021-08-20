@@ -24,9 +24,9 @@ return function (ContainerBuilder $containerBuilder) {
                 'db' => [
                     'driver' => 'mysql',
                     'host' => 'ec2-54-169-237-138.ap-southeast-1.compute.amazonaws.com',
-                    'username' => 'student-1',
+                    'username' => '',
                     'database' => 'codestar_tester',
-                    'password' => 'Student@01',
+                    'password' => '',
                     'charset' => 'utf8',
                     'collation' => 'utf8_general_ci',
                     'flags' => [
