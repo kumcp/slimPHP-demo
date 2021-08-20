@@ -108,15 +108,119 @@ return function (App $app) {
 
     $app->post("/equation", EquationAction::class);
 
-    $app->get("/db", function (Request $request, Response $response, array $args) {
+    $app->get("/posts", function (Request $request, Response $response, array $args) {
 
-        $db = $this->get(PDO::class);
+        try {
+            $db = $this->get(PDO::class);
 
-        $sth = $db->prepare("SELECT * FROM posts ORDER BY id");
-        $sth->execute();
-        $data = $sth->fetchAll(PDO::FETCH_ASSOC);
-        $payload = json_encode($data);
-        $response->getBody()->write($payload);
-        return $response->withHeader('Content-Type', 'application/json');
+            $sth = $db->prepare("SELECT * FROM posts");
+            $sth->execute();
+
+            $data = $sth->fetchAll(PDO::FETCH_CLASS);
+
+            $payload = json_encode($data);
+            $response->getBody()->write($payload);
+            return $response->withHeader('Content-Type', 'application/json');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    });
+
+    $app->get("/posts/{postId}", function (Request $request, Response $response, array $args) {
+
+        $postId = $args['postId'];
+
+        try {
+            $db = $this->get(PDO::class);
+
+            $sth = $db->prepare("SELECT * FROM posts WHERE id = ?");
+            $sth->execute([$postId]);
+
+            $data = $sth->fetchAll(PDO::FETCH_CLASS);
+
+            $payload = json_encode($data);
+            $response->getBody()->write($payload);
+            return $response->withHeader('Content-Type', 'application/json');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    });
+
+    $app->post("/posts", function (Request $request, Response $response, array $args) {
+
+        try {
+            $db = $this->get(PDO::class);
+
+            // $db->exec("INSERT INTO posts ( title, content, category_id) VALUES ( 'abc', 'abc', 1)");
+
+            $sth = $db->prepare("SELECT * FROM posts WHERE id < 10");
+            $sth->execute();
+
+            $data = $sth->fetchAll(PDO::FETCH_CLASS);
+
+            $payload = json_encode($data);
+            $response->getBody()->write($payload);
+            return $response->withHeader('Content-Type', 'application/json');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    });
+
+    $app->put("/posts/{postId}", function (Request $request, Response $response, array $args) {
+
+        try {
+            $db = $this->get(PDO::class);
+
+            // $db->exec("INSERT INTO posts ( title, content, category_id) VALUES ( 'abc', 'abc', 1)");
+
+            $sth = $db->prepare("SELECT * FROM posts WHERE id < 10");
+            $sth->execute();
+
+            $data = $sth->fetchAll(PDO::FETCH_CLASS);
+
+            $payload = json_encode($data);
+            $response->getBody()->write($payload);
+            return $response->withHeader('Content-Type', 'application/json');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    });
+
+    $app->delete("/posts/{postId}", function (Request $request, Response $response, array $args) {
+
+        try {
+            $db = $this->get(PDO::class);
+
+            // $db->exec("INSERT INTO posts ( title, content, category_id) VALUES ( 'abc', 'abc', 1)");
+
+            $sth = $db->prepare("SELECT * FROM posts WHERE id < 10");
+            $sth->execute();
+
+            $data = $sth->fetchAll(PDO::FETCH_CLASS);
+
+            $payload = json_encode($data);
+            $response->getBody()->write($payload);
+            return $response->withHeader('Content-Type', 'application/json');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+    });
+
+    $app->delete("/posts/maxComment", function (Request $request, Response $response, array $args) {
+
+        try {
+            $db = $this->get(PDO::class);
+
+            $sth = $db->prepare("SELECT * FROM posts WHERE id < 10");
+            $sth->execute();
+
+            $data = $sth->fetchAll(PDO::FETCH_CLASS);
+
+            $payload = json_encode($data);
+            $response->getBody()->write($payload);
+            return $response->withHeader('Content-Type', 'application/json');
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
     });
 };

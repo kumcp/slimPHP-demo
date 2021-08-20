@@ -40,6 +40,8 @@ return function (ContainerBuilder $containerBuilder) {
             $charset = $dbSettings['charset'];
             $flags = $dbSettings['flags'];
             $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+
+            // $dsn = "sqlsrv:Server=localhost,1433;Database=testdb"
             return new PDO($dsn, $username, $password);
         },
 
