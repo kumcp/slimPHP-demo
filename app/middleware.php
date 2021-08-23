@@ -1,6 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
+use App\Application\Middleware\AdminMiddleware;
 use App\Application\Middleware\SessionMiddleware;
 use Slim\App;
 

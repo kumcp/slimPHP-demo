@@ -5,8 +5,15 @@ declare(strict_types=1);
 use App\Application\Actions\Calculator\CalcAction;
 use App\Application\Actions\Calculator\CalculateAction;
 use App\Application\Actions\Calculator\EquationAction;
-use App\Application\Actions\User\ListUsersAction;
-use App\Application\Actions\User\ViewUserAction;
+use App\Application\Actions\Category\DetailCategoryAction;
+use App\Application\Actions\Category\ListCategoryAction;
+use App\Application\Actions\Posts\AddPostAction;
+use App\Application\Actions\Posts\DeletePostAction;
+use App\Application\Actions\Posts\GetAllPostAction;
+use App\Application\Actions\Posts\GetDetailPostAction;
+use App\Application\Actions\Posts\PostPostAction;
+use App\Application\Actions\Posts\UpdatePostAction;
+use App\Application\Middleware\AdminMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -22,12 +29,6 @@ return function (App $app) {
         $response->getBody()->write('Xin chao');
         return $response;
     })->setName('hello');
-
-
-    // $app->get('/xinchao', function (Request $request, Response $response) {
-    //     $response->getBody()->write('Xin chao cac ban');
-    //     return $response;
-    // });
 
     $app->get('/xinchao[/{lang}[/{name}]]', function (Request $request, Response $response, array $args) {
 
@@ -108,105 +109,13 @@ return function (App $app) {
 
     $app->post("/equation", EquationAction::class);
 
-    $app->get("/posts", function (Request $request, Response $response, array $args) {
+    $app->get("/posts", GetAllPostAction::class);
+    $app->get("/posts/{postId:[0-9]+}", GetDetailPostAction::class)->add(AdminMiddleware::class);;
+    $app->post("/posts", AddPostAction::class);
+    $app->post("/posts/{postId:[0-9]+}", UpdatePostAction::class);
+    $app->get("/posts/{postId:[0-9]+}/delete", DeletePostAction::class);
 
-        try {
-            $db = $this->get(PDO::class);
-
-            $sth = $db->prepare("SELECT * FROM posts");
-            $sth->execute();
-
-            $data = $sth->fetchAll(PDO::FETCH_CLASS);
-
-            $payload = json_encode($data);
-            $response->getBody()->write($payload);
-            return $response->withHeader('Content-Type', 'application/json');
-        } catch (\Throwable $th) {
-            return $th->getMessage();
-        }
-    });
-
-    $app->get("/posts/{postId}", function (Request $request, Response $response, array $args) {
-
-        $postId = $args['postId'];
-
-        try {
-            $db = $this->get(PDO::class);
-
-            $sth = $db->prepare("SELECT * FROM posts WHERE id = ?");
-            $sth->execute([$postId]);
-
-            $data = $sth->fetchAll(PDO::FETCH_CLASS);
-
-            $payload = json_encode($data);
-            $response->getBody()->write($payload);
-            return $response->withHeader('Content-Type', 'application/json');
-        } catch (\Throwable $th) {
-            return $th->getMessage();
-        }
-    });
-
-    $app->post("/posts", function (Request $request, Response $response, array $args) {
-
-        try {
-            $db = $this->get(PDO::class);
-
-            // $db->exec("INSERT INTO posts ( title, content, category_id) VALUES ( 'abc', 'abc', 1)");
-
-            $sth = $db->prepare("SELECT * FROM posts WHERE id < 10");
-            $sth->execute();
-
-            $data = $sth->fetchAll(PDO::FETCH_CLASS);
-
-            $payload = json_encode($data);
-            $response->getBody()->write($payload);
-            return $response->withHeader('Content-Type', 'application/json');
-        } catch (\Throwable $th) {
-            return $th->getMessage();
-        }
-    });
-
-    $app->put("/posts/{postId}", function (Request $request, Response $response, array $args) {
-
-        try {
-            $db = $this->get(PDO::class);
-
-            // $db->exec("INSERT INTO posts ( title, content, category_id) VALUES ( 'abc', 'abc', 1)");
-
-            $sth = $db->prepare("SELECT * FROM posts WHERE id < 10");
-            $sth->execute();
-
-            $data = $sth->fetchAll(PDO::FETCH_CLASS);
-
-            $payload = json_encode($data);
-            $response->getBody()->write($payload);
-            return $response->withHeader('Content-Type', 'application/json');
-        } catch (\Throwable $th) {
-            return $th->getMessage();
-        }
-    });
-
-    $app->delete("/posts/{postId}", function (Request $request, Response $response, array $args) {
-
-        try {
-            $db = $this->get(PDO::class);
-
-            // $db->exec("INSERT INTO posts ( title, content, category_id) VALUES ( 'abc', 'abc', 1)");
-
-            $sth = $db->prepare("SELECT * FROM posts WHERE id < 10");
-            $sth->execute();
-
-            $data = $sth->fetchAll(PDO::FETCH_CLASS);
-
-            $payload = json_encode($data);
-            $response->getBody()->write($payload);
-            return $response->withHeader('Content-Type', 'application/json');
-        } catch (\Throwable $th) {
-            return $th->getMessage();
-        }
-    });
-
-    $app->delete("/posts/maxComment", function (Request $request, Response $response, array $args) {
+    $app->get("/posts/maxComment", function (Request $request, Response $response, array $args) {
 
         try {
             $db = $this->get(PDO::class);
@@ -223,4 +132,7 @@ return function (App $app) {
             return $th->getMessage();
         }
     });
+
+    $app->get("/categories", ListCategoryAction::class);
+    $app->get("/category/{catId}", DetailCategoryAction::class);
 };
