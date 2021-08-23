@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
+use App\Application\Actions\Auth\LoginAction;
+use App\Application\Actions\Auth\LogoutAction;
 use App\Application\Actions\Calculator\CalcAction;
 use App\Application\Actions\Calculator\CalculateAction;
 use App\Application\Actions\Calculator\EquationAction;
+use App\Application\Actions\Category\AddCategoryAction;
+use App\Application\Actions\Category\DeleteCategoryAction;
 use App\Application\Actions\Category\DetailCategoryAction;
 use App\Application\Actions\Category\ListCategoryAction;
+use App\Application\Actions\Category\UpdateCategoryAction;
 use App\Application\Actions\Posts\AddPostAction;
 use App\Application\Actions\Posts\DeletePostAction;
 use App\Application\Actions\Posts\GetAllPostAction;
 use App\Application\Actions\Posts\GetDetailPostAction;
-use App\Application\Actions\Posts\PostPostAction;
 use App\Application\Actions\Posts\UpdatePostAction;
 use App\Application\Middleware\AdminMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -135,4 +139,12 @@ return function (App $app) {
 
     $app->get("/categories", ListCategoryAction::class);
     $app->get("/category/{catId}", DetailCategoryAction::class);
+    $app->post("/category", AddCategoryAction::class);
+    $app->post("/category/{catId:[0-9]+}/update", UpdateCategoryAction::class);
+    $app->get("/category/{catId}/delete", DeleteCategoryAction::class);
+
+    $app->get("/category/{catId}/post/{postId}", DetailCategoryAction::class);
+
+    $app->post("/login", LoginAction::class);
+    $app->get("/logout", LogoutAction::class);
 };
