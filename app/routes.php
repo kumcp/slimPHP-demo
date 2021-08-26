@@ -12,6 +12,8 @@ use App\Application\Actions\Category\DeleteCategoryAction;
 use App\Application\Actions\Category\DetailCategoryAction;
 use App\Application\Actions\Category\ListCategoryAction;
 use App\Application\Actions\Category\UpdateCategoryAction;
+use App\Application\Actions\FileUpload\DownloadImageAction;
+use App\Application\Actions\FileUpload\UploadImageAction;
 use App\Application\Actions\Posts\AddPostAction;
 use App\Application\Actions\Posts\DeletePostAction;
 use App\Application\Actions\Posts\GetAllPostAction;
@@ -147,4 +149,7 @@ return function (App $app) {
 
     $app->post("/login", LoginAction::class);
     $app->get("/logout", LogoutAction::class);
+
+    $app->post("/uploadImage", UploadImageAction::class);
+    $app->get("/downloadImage", DownloadImageAction::class);
 };

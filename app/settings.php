@@ -40,6 +40,7 @@ return function (ContainerBuilder $containerBuilder) {
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
                     ],
                 ],
+                'uploadDir' => __DIR__ . "/../public/img"
             ]);
         },
     ]);

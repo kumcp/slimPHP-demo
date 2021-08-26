@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Application\Actions;
 
+use App\Application\Settings\SettingsInterface;
 use App\Domain\DomainException\DomainRecordNotFoundException;
 use PDO;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
@@ -37,10 +39,11 @@ abstract class Action
     /**
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger, PDO $db)
+    public function __construct(LoggerInterface $logger, PDO $db, ContainerInterface $container)
     {
         $this->logger = $logger;
         $this->db = $db;
+        $this->settings = $container->get(SettingsInterface::class);
     }
 
     /**
