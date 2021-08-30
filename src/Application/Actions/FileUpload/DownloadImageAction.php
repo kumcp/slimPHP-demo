@@ -17,7 +17,7 @@ class DownloadImageAction extends Action
     {
 
         $directory = $this->settings->get('uploadDir');
-        $path = $directory . '/5371108c027eadca.csv';
+        $path = $directory . '/5371108c027eadca.csv'; // Ten file muon download
 
         $fh = fopen($path, 'rb');
         $file_stream = new Stream($fh);

@@ -14,6 +14,8 @@ use App\Application\Actions\Category\ListCategoryAction;
 use App\Application\Actions\Category\UpdateCategoryAction;
 use App\Application\Actions\FileUpload\DownloadImageAction;
 use App\Application\Actions\FileUpload\UploadImageAction;
+use App\Application\Actions\Image\DownImageAction;
+use App\Application\Actions\Image\UpImageAction;
 use App\Application\Actions\Posts\AddPostAction;
 use App\Application\Actions\Posts\DeletePostAction;
 use App\Application\Actions\Posts\GetAllPostAction;
@@ -24,6 +26,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
+use Slim\Psr7\Stream;
 
 return function (App $app) {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -152,4 +155,25 @@ return function (App $app) {
 
     $app->post("/uploadImage", UploadImageAction::class);
     $app->get("/downloadImage", DownloadImageAction::class);
+
+    $app->group("/image", function ($group) {
+        $group->get("/download", DownImageAction::class);
+        $group->post("/upload", UpImageAction::class);
+    });
+
+
+    $app->get("/static/{filetype}/{filename}", function (Request $request, Response $response, array $args) {
+        $filename = $args['filename'];
+        $filetype = $args['filetype'];
+        $directory = __DIR__ . "/../public/static";
+        $path = $directory . "/$filetype/$filename";
+
+        if (file_exists($path)) {
+            $fh = fopen($path, 'rb');
+            $file_stream = new Stream($fh);
+
+            return $response->withBody($file_stream);
+        }
+        return $response->withStatus(404, "File not found");
+    });
 };

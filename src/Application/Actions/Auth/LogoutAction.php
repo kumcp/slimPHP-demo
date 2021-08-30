@@ -15,7 +15,6 @@ class LogoutAction extends Action
     protected function action(): Response
     {
         session_destroy();
-
         return $this->respondWithData("You have been logged out", 200);
     }
 }
