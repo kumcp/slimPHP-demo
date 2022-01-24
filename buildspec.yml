@@ -31,7 +31,7 @@ phases:
       # - command
   pre_build:
     commands:
-      - composer require --dev phpunit/phpunit ^7
+      - composer require --dev phpunit/phpunit ^9.3.0
       - echo "Pre-build phase"
       # - command
   build:
