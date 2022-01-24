@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/web/
+    overwrite: purge
+file_exists_behavior: OVERWRITE
+hooks:
+  ApplicationStop:
+    - location: codedeploy/stop_server.sh
+      timeout: 300
+  AfterInstall:
+    - location: codedeploy/after_install.sh
+      timeout: 300
+  ApplicationStart:
+    - location: codedeploy/app_start.sh
+      runas: root
+      timeout: 300
