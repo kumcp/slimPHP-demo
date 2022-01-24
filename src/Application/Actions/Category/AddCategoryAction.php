@@ -14,6 +14,7 @@ class AddCategoryAction extends Action
      */
     protected function action(): Response
     {
+
         $body = $this->request->getParsedBody();
 
         $name = $body['name'];

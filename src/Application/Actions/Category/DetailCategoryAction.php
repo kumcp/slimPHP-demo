@@ -16,7 +16,9 @@ class DetailCategoryAction extends Action
     {
 
         if (array_key_exists("admin", $_SESSION)) {
-            $catId = $this->args['catId'];
+            $this->args['catId'];
+            $catId = $this->resolveArg('catId');
+
             $statement = $this->db->prepare("SELECT * FROM categories WHERE id=?");
             $statement->execute([$catId]);
 

@@ -35,7 +35,7 @@ return function (App $app) {
     });
 
     $app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('Xin chao');
+        $response->getBody()->write('Codestar PHP Project Test');
         return $response;
     })->setName('hello');
 
@@ -163,17 +163,19 @@ return function (App $app) {
 
 
     $app->get("/static/{filetype}/{filename}", function (Request $request, Response $response, array $args) {
+
         $filename = $args['filename'];
         $filetype = $args['filetype'];
         $directory = __DIR__ . "/../public/static";
         $path = $directory . "/$filetype/$filename";
 
-        if (file_exists($path)) {
-            $fh = fopen($path, 'rb');
-            $file_stream = new Stream($fh);
-
-            return $response->withBody($file_stream);
+        if (!file_exists($path)) {
+            return $response->withStatus(404, "File not found");
         }
-        return $response->withStatus(404, "File not found");
+
+        $fh = fopen($path, 'rb');
+        $file_stream = new Stream($fh);
+
+        return $response->withBody($file_stream);
     });
 };

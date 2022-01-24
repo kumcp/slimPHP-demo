@@ -39,7 +39,7 @@ abstract class Action
     /**
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger, PDO $db, ContainerInterface $container)
+    public function __construct(LoggerInterface $logger, PDO $db = null, ContainerInterface $container = null)
     {
         $this->logger = $logger;
         $this->db = $db;

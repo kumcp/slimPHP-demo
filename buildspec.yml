@@ -35,7 +35,8 @@ phases:
       # - command
   build:
     commands:
-      - echo "Build phase" 
+      - echo "Build phase"
+      - composer test
       # - command
   post_build:
     commands:
@@ -49,10 +50,9 @@ phases:
     #base-directory: location
     #discard-paths: yes
     #file-format: JunitXml | CucumberJson
-#artifacts:
-  #files:
-    # - location
-    # - location
+artifacts:
+  files:
+    - .
   #name: $(date +%Y-%m-%d)
   #discard-paths: yes
   #base-directory: location
